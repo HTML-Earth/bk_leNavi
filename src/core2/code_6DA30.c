@@ -176,7 +176,7 @@ MapFontTextureMap D_8036907C[] ={
     0
 };
 
-char D_80369200[] = {
+char validCharacters[] = { //D_80369200
     '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 
     ':', 
     'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 
@@ -197,23 +197,23 @@ Gfx D_80369238[] = {
 
 /* .bss */
 char D_80380AB0;
-BKSprite *D_80380AB8[0x5];
+BKSprite *font_sheets[0x5]; //D_80380AB8
 
 FontLetter  *print_sFonts[4];
 PrintBuffer *print_sPrintBuffer;
 PrintBuffer *print_sCurrentPtr;
 s32 D_80380AE8;
 s32 D_80380AEC;
-s32 D_80380AF0; //print_sMonospaced
-s32 D_80380AF4;
+s32 print_sMonospaced; //D_80380AF0
+s32 print_letterGradient; //D_80380AF4
 s32 D_80380AF8;
 s32 D_80380AFC;
-s32 D_80380B00;
+s32 print_background; //D_80380B00
 s32 D_80380B04;
 bool print_sInFontFormatMode;
 s32 D_80380B0C;
-s32 D_80380B10;
-s32 D_80380B14;
+s32 print_shaking; //D_80380B10
+s32 print_pointFiltering; //D_80380B14
 s32 D_80380B18;
 s32 D_80380B1C;
 s8 D_80380B20[0x400];
@@ -363,8 +363,8 @@ FontLetter *func_802F4C3C(BKSprite *alphaMask, BKSprite *textureSprite){
 void func_802F4F64(void){
     s32 i; 
     for(i = 0; i< 5; i++){
-        assetcache_release(D_80380AB8[i]);
-        D_80380AB8[i] = NULL;
+        assetcache_release(font_sheets[i]);
+        font_sheets[i] = NULL;
         if(i < 4){
             free(print_sFonts[i]);
             print_sFonts[i] = NULL;
@@ -383,31 +383,31 @@ void func_802F5010(void){
 
 void func_802F5060(s32 textureId){
     s32 tmp_a2;
-    tmp_a2 = func_802546E4(D_80380AB8[1]);
+    tmp_a2 = func_802546E4(font_sheets[1]);
     if(tmp_a2 & 0xF)
         tmp_a2 += 0x10 - (tmp_a2 & 0xF);
-    if(!code_B3A80_func_8033BDAC(SPRITE_BOLD_FONT_NUMBERS_ALPHAMASK, D_80380AB8[1],tmp_a2)){
-        assetcache_release(D_80380AB8[1]);
-        D_80380AB8[1] = assetcache_get(SPRITE_BOLD_FONT_NUMBERS_ALPHAMASK);
+    if(!code_B3A80_func_8033BDAC(SPRITE_BOLD_FONT_NUMBERS_ALPHAMASK, font_sheets[1],tmp_a2)){
+        assetcache_release(font_sheets[1]);
+        font_sheets[1] = assetcache_get(SPRITE_BOLD_FONT_NUMBERS_ALPHAMASK);
     }
-    if(D_80380AB8[3]){
-        tmp_a2 = func_802546E4(D_80380AB8[3]);
+    if(font_sheets[3]){
+        tmp_a2 = func_802546E4(font_sheets[3]);
         if(tmp_a2 & 0xF)
             tmp_a2 += 0x10 - (tmp_a2 & 0xF);
-        if(!code_B3A80_func_8033BDAC(SPRITE_BOLD_FONT_LETTERS_ALPHAMASK, D_80380AB8[3],tmp_a2)){
-            assetcache_release(D_80380AB8[3]);
-            D_80380AB8[3] = assetcache_get(SPRITE_BOLD_FONT_LETTERS_ALPHAMASK);
+        if(!code_B3A80_func_8033BDAC(SPRITE_BOLD_FONT_LETTERS_ALPHAMASK, font_sheets[3],tmp_a2)){
+            assetcache_release(font_sheets[3]);
+            font_sheets[3] = assetcache_get(SPRITE_BOLD_FONT_LETTERS_ALPHAMASK);
         }
     }//L802F510C
-    D_80380AB8[4] = assetcache_get(textureId);
+    font_sheets[4] = assetcache_get(textureId);
     free(print_sFonts[1]);
-    print_sFonts[1] = func_802F4C3C(D_80380AB8[1], D_80380AB8[4]);
-    if(D_80380AB8[3]){
+    print_sFonts[1] = func_802F4C3C(font_sheets[1], font_sheets[4]);
+    if(font_sheets[3]){
         free(print_sFonts[3]);
-        print_sFonts[3] = func_802F4C3C(D_80380AB8[3], D_80380AB8[4]);
+        print_sFonts[3] = func_802F4C3C(font_sheets[3], font_sheets[4]);
     }
-    assetcache_release(D_80380AB8[4]);
-    D_80380AB8[4] = NULL;
+    assetcache_release(font_sheets[4]);
+    font_sheets[4] = NULL;
     D_80380B1C = textureId;
 }
 
@@ -421,32 +421,32 @@ void func_802F51B8(void){
     s32 length;
     int found;
 
-    length = strlen(D_80369200);
+    length = strlen(validCharacters);
     D_80380AE8 = \
     D_80380AEC = \
-    D_80380AF0 = \
-    D_80380AF4 = \
+    print_sMonospaced = \
+    print_letterGradient = \
     D_80380AF8 = \
     D_80380AFC = \
     print_sInFontFormatMode = \
     D_80380B04 = \
-    D_80380B00 = \
-    D_80380B10 = \
-    D_80380B14 = 0;
+    print_background = \
+    print_shaking = \
+    print_pointFiltering = 0;
     D_80380AB0 = 0;
     func_802F7A2C(3);
-    D_80380AB8[0] = assetcache_get(SPRITE_DIALOG_FONT_ALPHAMASK);
-    D_80380AB8[1] = assetcache_get(SPRITE_BOLD_FONT_NUMBERS_ALPHAMASK);
-    D_80380AB8[4] = assetcache_get(func_802F49C0());
-    print_sFonts[0] =  func_802F4C3C(D_80380AB8[0], D_80380AB8[4]);
-    print_sFonts[1] =  func_802F4C3C(D_80380AB8[1], D_80380AB8[4]);
+    font_sheets[0] = assetcache_get(SPRITE_DIALOG_FONT_ALPHAMASK);
+    font_sheets[1] = assetcache_get(SPRITE_BOLD_FONT_NUMBERS_ALPHAMASK);
+    font_sheets[4] = assetcache_get(func_802F49C0());
+    print_sFonts[0] =  func_802F4C3C(font_sheets[0], font_sheets[4]);
+    print_sFonts[1] =  func_802F4C3C(font_sheets[1], font_sheets[4]);
     print_sPrintBuffer = malloc(0x20*sizeof(PrintBuffer));
     func_802F5010();
 
     for(i = 0; i < 0x80; i++){//L802F52EC
         found = 0;
         for(j = 0; j < length && !found; j++){//L802F5304
-            if(D_80369200[j] == i){
+            if(validCharacters[j] == i){
                 D_80380F20[i] = j;
                 found = 1;
             }//L802F531C
@@ -454,24 +454,24 @@ void func_802F51B8(void){
         if(!found)
             D_80380F20[i] = -1;
     }
-    assetcache_release(D_80380AB8[4]);
-    D_80380AB8[4] = NULL;
+    assetcache_release(font_sheets[4]);
+    font_sheets[4] = NULL;
     D_80380B1C = func_802F49C0();
 }
 
 void func_802F5374(void){
     if(D_80380B18 > 0 && --D_80380B18 == 0){
-        assetcache_release(D_80380AB8[3]);
-        D_80380AB8[3] = 0;
+        assetcache_release(font_sheets[3]);
+        font_sheets[3] = 0;
         free(print_sFonts[3]);
         print_sFonts[3] = NULL;
     }
 }
 
 void func_802F53D0(void){
-    if(D_80380AB8[3]){
-        assetcache_release(D_80380AB8[3]);
-        D_80380AB8[3] = NULL;
+    if(font_sheets[3]){
+        assetcache_release(font_sheets[3]);
+        font_sheets[3] = NULL;
     }
     if(print_sFonts[3]){
         free(print_sFonts[3]);
@@ -492,19 +492,19 @@ void printbuffer_defrag(void){
 //returns the pixel data and type for a given letter
 BKSpriteTextureBlock *func_802F5494(s32 letterId, s32 *fontType){
     if(D_80380AE8 != 1 || (D_80380AE8 == 1 && letterId < 0xA)){
-        *fontType = D_80380AB8[D_80380AE8]->type;
+        *fontType = font_sheets[D_80380AE8]->type;
         return print_sFonts[D_80380AE8][letterId].unk0;
     }
     else{//L802F5510
-        if(!D_80380AB8[3]){
-            D_80380AB8[3] = assetcache_get(SPRITE_BOLD_FONT_LETTERS_ALPHAMASK);
-            D_80380AB8[4] = assetcache_get(D_80380B1C);
-            print_sFonts[3] = func_802F4C3C(D_80380AB8[3], D_80380AB8[4]);
-            assetcache_release(D_80380AB8[4]);
-            D_80380AB8[4] = NULL;
+        if(!font_sheets[3]){
+            font_sheets[3] = assetcache_get(SPRITE_BOLD_FONT_LETTERS_ALPHAMASK);
+            font_sheets[4] = assetcache_get(D_80380B1C);
+            print_sFonts[3] = func_802F4C3C(font_sheets[3], font_sheets[4]);
+            assetcache_release(font_sheets[4]);
+            font_sheets[4] = NULL;
         }//L802F5568
         D_80380B18 = 5;
-        *fontType  = D_80380AB8[3]->type;
+        *fontType  = font_sheets[3]->type;
         return print_sFonts[3][letterId-10].unk0;
     }
 }
@@ -580,12 +580,12 @@ void _printbuffer_draw_letter(char letter, f32* xPtr, f32* yPtr, f32 arg3, Gfx *
         print_sInFontFormatMode = FALSE;
         switch(letter){
             case ' '://802F5818
-                *xPtr += ((D_80380AF0) ? D_80369068[D_80380AE8]: D_80369068[D_80380AE8]*0.8) * arg3;
+                *xPtr += ((print_sMonospaced) ? D_80369068[D_80380AE8]: D_80369068[D_80380AE8]*0.8) * arg3;
                 break;
 
             case 'b': //L802F5890
                 //toggle background
-                D_80380B00  = D_80380B00 ^ 1;
+                print_background = print_background ^ 1;
                 break;
 
             case 'f': //L802F58A8
@@ -593,11 +593,11 @@ void _printbuffer_draw_letter(char letter, f32* xPtr, f32* yPtr, f32 arg3, Gfx *
                 break;
 
             case 'l': //L802F58BC
-                D_80380B10 = 0;
+                print_shaking = 0;
                 break;
 
             case 'h': //L802F58C8
-                D_80380B10 = 1;
+                print_shaking = 1;
                 break;
 
             case 'j': //L802F58D4
@@ -617,12 +617,12 @@ void _printbuffer_draw_letter(char letter, f32* xPtr, f32* yPtr, f32 arg3, Gfx *
                 break;
 
             case 'p': //L802F5924
-                D_80380AF0 = D_80380AF0 ^1;
+                print_sMonospaced = print_sMonospaced ^1;
                 break;
 
             case 'q': //L802F593C
-                D_80380B14 = D_80380B14^1;
-                if(D_80380B14){
+                print_pointFiltering = print_pointFiltering^1;
+                if(print_pointFiltering){
                     gDPSetTextureFilter((*gfx)++, G_TF_POINT);
                 }
                 else{//L802F5978
@@ -632,8 +632,8 @@ void _printbuffer_draw_letter(char letter, f32* xPtr, f32* yPtr, f32 arg3, Gfx *
 
             case 'v': //L802F59A0 
                 //toggle letter gradient
-                D_80380AF4 ^= 1;
-                if(D_80380AF4){
+                print_letterGradient ^= 1;
+                if(print_letterGradient){
                     viewport_setRenderViewportAndOrthoMatrix(gfx, mtx);
                     gDPPipeSync((*gfx)++);
                     gDPSetTexturePersp((*gfx)++, G_TP_PERSP);
@@ -664,14 +664,17 @@ void _printbuffer_draw_letter(char letter, f32* xPtr, f32* yPtr, f32 arg3, Gfx *
                 }
                 break;
 
+            // 0xfd = ý
             case 0xfd: //L802F5BEC
                 print_sInFontFormatMode = TRUE;
                 break;
 
+            // 0xfe = þ
             case 0xfe://L802F5BF4
                 D_80380B04 = 1;
                 break;
 
+            // 0xff = ÿ
             case 0xff://L802F5BFC
                 D_80380B04 = 2;
                 break;
@@ -681,11 +684,11 @@ void _printbuffer_draw_letter(char letter, f32* xPtr, f32* yPtr, f32 arg3, Gfx *
     }
     else{//L802F5C08
         sp214 = func_802F5494(sp20C, &sp1F4);
-        if (D_80380B10 != 0) {
+        if (print_shaking != 0) {
                sp200 += randf2(-2.0f, 2.0f);
                f28 += randf2(-2.0f, 2.0f);
         }
-        sp1F8 = (D_80380AF0 != 0) ? D_80369068[D_80380AE8] : sp214->x;
+        sp1F8 = (print_sMonospaced != 0) ? D_80369068[D_80380AE8] : sp214->x;
 
         // temp_f2 = D_80380FA0;
         // phi_f2 = temp_f2;
@@ -730,7 +733,7 @@ void _printbuffer_draw_letter(char letter, f32* xPtr, f32* yPtr, f32 arg3, Gfx *
             // gDPLoadMultiTile((*gfx)++, &D_80380B20,)
             
         }//L802F677C
-        if (D_80380AF4 != 0) {
+        if (print_letterGradient != 0) {
             f32 temp_f24;
             f32 spD0;
             f32 ix;
@@ -802,14 +805,14 @@ f32 func_802F6C90(u8 letter, f32* xPtr, f32 *yPtr, f32 arg3){
     }
     if (!var_v0 || print_sInFontFormatMode) {
         if (letter == ' ') {
-            var_f2 = (D_80380AF0) ? D_80369068[D_80380AE8] : 0.8*D_80369068[D_80380AE8];
+            var_f2 = (print_sMonospaced) ? D_80369068[D_80380AE8] : 0.8*D_80369068[D_80380AE8];
         }
         else{
             return *xPtr;
         }
     }
     else {
-        if(D_80380AF0){
+        if(print_sMonospaced){
             var_f2 = D_80369068[D_80380AE8];
         }
         else{
@@ -840,7 +843,7 @@ void printbuffer_draw(Gfx **gfx, Mtx **mtx, Vtx **vtx) {
                 _printbuffer_draw_letter(0xFD, &_x, &_y, 1.0f, gfx, mtx, vtx);
                 _printbuffer_draw_letter(print_sCurrentPtr->fmtString[j], &_x, &_y, 1.0f, gfx, mtx, vtx);
             }
-            if (D_80380B00 != 0) {
+            if (print_background != 0) {
                 width = (strlen(print_sCurrentPtr->string) -1)*D_80369068[D_80380AE8];
                 gDPPipeSync((*gfx)++);
                 gDPSetPrimColor((*gfx)++, 0, 0, 0x00, 0x00, 0x00, 0x64);
@@ -849,7 +852,7 @@ void printbuffer_draw(Gfx **gfx, Mtx **mtx, Vtx **vtx) {
                 gDPPipeSync((*gfx)++);
 
             }//L802F73E8
-            if ((D_80380AF8 == 0) && (D_80380AF4 == 0)) {
+            if ((D_80380AF8 == 0) && (print_letterGradient == 0)) {
                 if (D_80380AE8 != 0) {
                     gDPSetCombineMode((*gfx)++, G_CC_DECALRGBA, G_CC_DECALRGBA);
                     gDPSetPrimColor((*gfx)++, 0, 0, 0xFF, 0xFF, 0xFF, 0xFF);

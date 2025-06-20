@@ -35,9 +35,9 @@ f32 D_80365DD0[3][3] = {
     {110.0f, 340.0f, 110.0f},
     {-413.333313f, 353.333313f, -234.305511f}
 };
-u8 *D_80365DF4 = "USE THE CONTROL STICK TO SELECT A GAME.";   
-u8 *D_80365DF8 = "PRESS A TO PLAY THE GAME OR Z TO ERASE IT!";
-u8 *D_80365DFC = "ARE YOU SURE? PRESS A TO CONFIRM, OR B TO CANCEL";
+u8 *D_80365DF4 = "SAR VULTSYÌPIT FTE FTXIVEY UVANTI.";
+u8 *D_80365DF8 = "TSARI 'AMPI A-TI FTE TSYIVUL FU Z-TI FTE 'IVAKU!";
+u8 *D_80365DFC = "AM'AKE SRAK? 'AMPI A-TI FTE FÌKEM SIVI, FU B-TI FTE FTIVANGLEN.";
 s32 D_80365E00 = -1;
 f32 D_80365E04[3][3] = {
     {-435.0f,      278.0f,  -159.0f},
@@ -187,7 +187,7 @@ void func_802C4768(s32 gamenum){
         D_8037DCCE[gamenum] = (itemscore_timeScores_get(LEVEL_6_LAIR)) ? 1 : 0;
     
         strcpy(upperTextLine, "");
-        strcat(upperTextLine, "GAME ");
+        strcat(upperTextLine, "UVAN A");
         switch(gamenum){
             case 0: //L802C4820
                 strIToA(upperTextLine, 1);
@@ -199,20 +199,20 @@ void func_802C4768(s32 gamenum){
                 strIToA(upperTextLine, 2);
                 break;
         }//L802C4858
-        strcat(upperTextLine, ": TIME ");
+        strcat(upperTextLine, "VE: KRR ");
         strcat(upperTextLine, gcpausemenu_TimeToA(itemscore_timeScores_getTotal()));
         strcat(upperTextLine, ",");
         strcat(upperTextLine, "");
 
         strcpy(lowerTextLine, "");
         strIToA(lowerTextLine, jiggyscore_total());
-        strcat(lowerTextLine, " JIGSAW");
+        strcat(lowerTextLine, " JIGSAW"); //TODO: translate
         if(jiggyscore_total() != 1){
             strcat(lowerTextLine, "S");
         }
         strcat(lowerTextLine, ", ");
         strIToA(lowerTextLine, itemscore_noteScores_getTotal());
-        strcat(lowerTextLine, " NOTE");
+        strcat(lowerTextLine, " NOTE"); //TODO: translate
         if(itemscore_noteScores_getTotal() != 1){
             strcat(lowerTextLine, "S");
         }
@@ -222,7 +222,7 @@ void func_802C4768(s32 gamenum){
     else{
         D_8037DCCE[gamenum] = 0;
         strcpy(upperTextLine, "");
-        strcat(upperTextLine, "GAME ");
+        strcat(upperTextLine, "UVAN A");
         switch (gamenum){
             case 0:
                 strIToA(upperTextLine, 1);
@@ -234,7 +234,7 @@ void func_802C4768(s32 gamenum){
                 strIToA(upperTextLine, 2);
                 break;
         }//L802C4A40
-        strcat(upperTextLine, ": EMPTY");
+        strcat(upperTextLine, "VE: MEK");
         strcpy(lowerTextLine, "");
     }//L802C4A68
     sp20[0] = upperTextLine;\

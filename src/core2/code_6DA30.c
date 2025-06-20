@@ -555,7 +555,7 @@ void _printbuffer_draw_letter(char letter, f32* xPtr, f32* yPtr, f32 arg3, Gfx *
                 foundLetterToPrint = TRUE;
             }
             else if (letter == 140) { // Ì
-                letterIdInSheet = 41; // I TODO: use Ì
+                letterIdInSheet = 40; // I TODO: use Ì
                 foundLetterToPrint = TRUE;
             }
             break;

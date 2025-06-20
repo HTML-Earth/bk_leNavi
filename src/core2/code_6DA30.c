@@ -282,7 +282,7 @@ void func_802F4B58(BKSpriteTextureBlock *alphaMask, BKSpriteTextureBlock *textur
 }
 
 //This functions seperates the fonts into letters
-FontLetter *func_802F4C3C(BKSprite *alphaMask, BKSprite *textureSprite){
+FontLetter *separateFontIntoLetters(BKSprite *alphaMask, BKSprite *textureSprite){ //func_802F4C3C
     BKSpriteFrame * font = sprite_getFramePtr(alphaMask, 0);
     BKSpriteTextureBlock *chunkPtr;
     FontLetter * sp2C = malloc((font->chunkCnt + 1)*sizeof(FontLetter));
@@ -360,7 +360,7 @@ FontLetter *func_802F4C3C(BKSprite *alphaMask, BKSprite *textureSprite){
     return sp2C;
 }
 
-void func_802F4F64(void){
+void freeFontSheetsAndPrintBuffer(void){ //func_802F4F64
     s32 i; 
     for(i = 0; i< 5; i++){
         assetcache_release(font_sheets[i]);
@@ -401,10 +401,10 @@ void func_802F5060(s32 textureId){
     }//L802F510C
     font_sheets[4] = assetcache_get(textureId);
     free(print_sFonts[1]);
-    print_sFonts[1] = func_802F4C3C(font_sheets[1], font_sheets[4]);
+    print_sFonts[1] = separateFontIntoLetters(font_sheets[1], font_sheets[4]);
     if(font_sheets[3]){
         free(print_sFonts[3]);
-        print_sFonts[3] = func_802F4C3C(font_sheets[3], font_sheets[4]);
+        print_sFonts[3] = separateFontIntoLetters(font_sheets[3], font_sheets[4]);
     }
     assetcache_release(font_sheets[4]);
     font_sheets[4] = NULL;
@@ -438,8 +438,8 @@ void func_802F51B8(void){
     font_sheets[0] = assetcache_get(SPRITE_DIALOG_FONT_ALPHAMASK);
     font_sheets[1] = assetcache_get(SPRITE_BOLD_FONT_NUMBERS_ALPHAMASK);
     font_sheets[4] = assetcache_get(func_802F49C0());
-    print_sFonts[0] =  func_802F4C3C(font_sheets[0], font_sheets[4]);
-    print_sFonts[1] =  func_802F4C3C(font_sheets[1], font_sheets[4]);
+    print_sFonts[0] =  separateFontIntoLetters(font_sheets[0], font_sheets[4]);
+    print_sFonts[1] =  separateFontIntoLetters(font_sheets[1], font_sheets[4]);
     print_sPrintBuffer = malloc(0x20*sizeof(PrintBuffer));
     func_802F5010();
 
@@ -499,7 +499,7 @@ BKSpriteTextureBlock *func_802F5494(s32 letterId, s32 *fontType){
         if(!font_sheets[3]){
             font_sheets[3] = assetcache_get(SPRITE_BOLD_FONT_LETTERS_ALPHAMASK);
             font_sheets[4] = assetcache_get(D_80380B1C);
-            print_sFonts[3] = func_802F4C3C(font_sheets[3], font_sheets[4]);
+            print_sFonts[3] = separateFontIntoLetters(font_sheets[3], font_sheets[4]);
             assetcache_release(font_sheets[4]);
             font_sheets[4] = NULL;
         }//L802F5568
@@ -555,7 +555,7 @@ void _printbuffer_draw_letter(char letter, f32* xPtr, f32* yPtr, f32 arg3, Gfx *
                 foundLetterToPrint = TRUE;
             }
             else if (letter == 140) { // Ì
-                letterIdInSheet = 40; // I TODO: use Ì
+                letterIdInSheet = 60; // Ü ( replaced with custom Ì in 06EB.sprite.unknown(256).bin )
                 foundLetterToPrint = TRUE;
             }
             break;

@@ -560,6 +560,12 @@ void _printbuffer_draw_letter(char letter, f32* xPtr, f32* yPtr, f32 arg3, Gfx *
             }
             break;
         case 1: //L802F56A0
+            if (letter == 132) { // Ä
+                letter = 'A';// TODO: use Ä
+            }
+            else if (letter == 140) { // Ì
+                letter = 'I'; // TODO: use Ì
+            }
             if(letter < '\x80' && D_80380F20[letter] >= 0){
                 for(i = 0; D_80369000[i].unk0 != 0; i++){
                     if(letter == D_80369000[i].unk1 && D_80380AB0 == D_80369000[i].unk0){
